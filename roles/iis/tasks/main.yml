@@ -1,0 +1,55 @@
+- name: Install DSC modules
+  win_psmodule:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - xWebAdministration
+    - xNetworking
+
+- name: Install IIS features that are required
+  win_dsc:
+    resource_name: WindowsFeature
+    Name: '{{ item }}'
+    Ensure: Present
+  loop:
+  - Web-Server
+  - Web-Asp-Net45
+
+- name: Setup web content
+  win_dsc:
+    resource_name: File
+    DestinationPath: C:\inetpub\IISSite\index.html
+    Type: File
+    Contents: |
+      <html>
+      <head><title>IIS Site</title></head>
+      <body>This is the body</body>
+      </html>
+    Ensure: present
+
+- name: Create new website
+  win_dsc:
+    resource_name: xWebsite
+    Name: NewIISSite
+    State: Started
+    PhysicalPath: C:\inetpub\IISSite\
+    BindingInfo:
+    - Protocol: http
+      Port: '{{ iis_port }}'
+      IPAddress: '*'
+    AuthenticationInfo:
+      Anonymous: yes
+      Basic: no
+      Digest: no
+      Windows: no
+
+- name: Open Firewall Port
+  win_dsc:
+    resource_name: xFirewall
+    Name: IISHTTPPort
+    Action: Allow
+    Direction: Inbound
+    LocalPort: '{{ iis_port }}'
+    Protocol: 'TCP'
+    Profile: 'Any'
+    Enabled: 'True'

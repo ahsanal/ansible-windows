@@ -1,0 +1,9 @@
+- name: Deploy and run Powershell script
+  hosts: windows
+  connection: winrm
+  gather_facts: yes
+  become: no
+  serial: "{{ batch_size | default(5) }}"
+
+  roles:
+    - powershell

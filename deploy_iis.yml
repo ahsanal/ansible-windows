@@ -1,0 +1,10 @@
+- name: Setup IIS Server
+  hosts: windows
+  connection: winrm
+  gather_facts: yes
+  become: no
+  serial: "{{ batch_size | default(5) }}"
+
+  roles:
+    - name: iis
+      iis_port: 8080

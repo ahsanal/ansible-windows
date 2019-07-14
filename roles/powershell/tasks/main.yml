@@ -1,0 +1,7 @@
+- name: ensure scripts are deployed
+  template:
+    src: hello.ps1.j2
+    dest: C:\hello.ps1
+
+- name: execute powershell script
+  win_shell: C:\hello.ps1

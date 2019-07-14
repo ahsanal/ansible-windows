@@ -1,0 +1,4 @@
+[windows]
+win-0 	ansible_host=10.0.1.144
+win-1   ansible_host=10.0.1.148
+win-2   ansible_host=10.0.1.232
