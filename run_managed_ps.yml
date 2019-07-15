@@ -1,5 +1,5 @@
 - name: Deploy and run Powershell script
-  hosts: windows
+  hosts: all
   connection: winrm
   gather_facts: yes
   become: no

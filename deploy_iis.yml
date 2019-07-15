@@ -1,5 +1,5 @@
 - name: Setup IIS Server
-  hosts: windows
+  hosts: all
   connection: winrm
   gather_facts: yes
   become: no

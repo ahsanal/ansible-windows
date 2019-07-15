@@ -1,5 +1,5 @@
 - name: Patch Windows Servers
-  hosts: windows
+  hosts: all
   connection: winrm
   gather_facts: yes
   become: no
@@ -24,22 +24,22 @@
           win_msg:
             display_seconds: 60
             msg: "This system is being patched and may reboot shortly."
-  
+
         - name: perform an update
           win_updates:
             category_names: "{{ category_names | default(['CriticalUpdates', 'SecurityUpdates', 'UpdateRollups']) }}"
             reboot: no
             state: installed
           register: update
-    
+
         - debug:
             var: update
-    
+
         - name: reboot the server if needed
           win_reboot:
           when: update.reboot_required
           register: reboot
-    
+
         - name: save reboot time
           set_stats:
             per_host: yes
@@ -48,11 +48,11 @@
                 rebooted: "{{ reboot.rebooted }}"
                 elapsed: "{{ reboot.elapsed }}"
           when: update.reboot_required
-    
+
         - name: perform health check
           debug:
             msg: pass
-    
+
         - name: turn off maintenance mode
           debug:
             msg: done
