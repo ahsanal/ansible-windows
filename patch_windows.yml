@@ -1,8 +1,6 @@
 - name: Patch Windows Servers
   hosts: all
-  connection: winrm
   gather_facts: yes
-  become: no
   serial: "{{ batch_size | default(5) }}"
   any_errors_fatal: yes
 
